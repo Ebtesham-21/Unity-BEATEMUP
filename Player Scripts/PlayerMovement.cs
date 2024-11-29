@@ -27,7 +27,12 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
+    
+    }
+
+void FixedUpdate() {
+    DetectMovement();
+        
     }
     void DetectMovement() {
             myBody.velocity = new Vector3(
