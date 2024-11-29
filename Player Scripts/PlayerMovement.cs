@@ -27,17 +27,27 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    
+        RotatePlayer();
     }
 
 void FixedUpdate() {
     DetectMovement();
         
     }
+// movement
     void DetectMovement() {
             myBody.velocity = new Vector3(
                 Input.GetAxisRaw(Axis.HORIZONTAL_AXIS) * (-walk_Speed), myBody.velocity.y,
                 Input.GetAxisRaw(Axis.VERTICAL_AXIS) * (-z_Speed));
             
+        } 
+// rotation
+    void RotatePlayer(){
+        if(Input.GetAxisRaw(Axis.HORIZONTAL_AXIS) >0){
+            transform.rotation = Quaternion.Euler(0f, -Mathf.Abs(rotation_Y), 0f);
+        } else if(Input.GetAxisRaw(Axis.VERTICAL_AXIS) < 0) {
+              transform.rotation = Quaternion.Euler(0f, Mathf.Abs(rotation_Y), 0f);
+
         }
+    }
 }
