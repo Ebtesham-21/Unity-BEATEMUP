@@ -6,7 +6,7 @@ using UnityEngine.Animations;
 public class PlayerMovement : MonoBehaviour
 {
 
-    //private player animation player_animation
+    private CharacterAnimation player_Anim;
 
     private Rigidbody myBody;
 
@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake() {
        
         myBody = GetComponent<Rigidbody>();
+        player_Anim = GetComponentInChildren<CharacterAnimation>();
         
     }
 
@@ -28,9 +29,10 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         RotatePlayer();
+        AnimatePlayerWalk();
     }
 
-void FixedUpdate() {
+    void FixedUpdate() {
     DetectMovement();
         
     }
@@ -45,9 +47,19 @@ void FixedUpdate() {
     void RotatePlayer(){
         if(Input.GetAxisRaw(Axis.HORIZONTAL_AXIS) >0){
             transform.rotation = Quaternion.Euler(0f, -Mathf.Abs(rotation_Y), 0f);
-        } else if(Input.GetAxisRaw(Axis.VERTICAL_AXIS) < 0) {
+        } else if(Input.GetAxisRaw(Axis.HORIZONTAL_AXIS) < 0) {
               transform.rotation = Quaternion.Euler(0f, Mathf.Abs(rotation_Y), 0f);
 
         }
+    }
+
+    void AnimatePlayerWalk(){
+if(Input.GetAxisRaw(Axis.HORIZONTAL_AXIS) != 0 || Input.GetAxisRaw(Axis.VERTICAL_AXIS) !=0) {
+   
+    player_Anim.Walk(true);
+}
+else {
+    player_Anim.Walk(false);
+}
     }
 }
