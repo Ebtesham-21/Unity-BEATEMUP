@@ -33,10 +33,13 @@ public class PlayerAttack : MonoBehaviour
     void Update()
     {
         ComboAttacks();
+        ResetComboState();
     }
 
     void ComboAttacks() {
         if(Input.GetKeyDown(KeyCode.Z)){
+            if(current_Combo_State == ComboState.Punch_3 || current_Combo_State == ComboState.Kick_1 || current_Combo_State == ComboState.Kick_2)
+            return;
             current_Combo_State++;
             activateTimerToReset = true;
             current_Combo_Timer = default_Combo_Timer;
@@ -52,7 +55,37 @@ public class PlayerAttack : MonoBehaviour
             }
         }
         if(Input.GetKeyDown(KeyCode.X)){
-                player_Anim.Kick_1();
+                if(current_Combo_State == ComboState.Kick_2 || current_Combo_State == ComboState.Punch_3) return;
+
+                if(current_Combo_State == ComboState.NONE || current_Combo_State == ComboState.Punch_1 || current_Combo_State == ComboState.Punch_2 ) {
+                    current_Combo_State = ComboState.Kick_1;
+                } else if(current_Combo_State == ComboState.Kick_1) {
+                    current_Combo_State++;
+
+                }
+
+                activateTimerToReset = true;
+                current_Combo_Timer = default_Combo_Timer;
+
+                if(current_Combo_State == ComboState.Kick_1 ){
+                    player_Anim.Kick_1();
+                }
+                if(current_Combo_State == ComboState.Kick_2 ){
+                    player_Anim.Kick_2();
+                }
         }
     }
+    // Combo attacks
+    void ResetComboState(){
+        if(activateTimerToReset) {
+            current_Combo_Timer -= Time.deltaTime;
+
+            if(current_Combo_Timer <= 0f){
+                current_Combo_State = ComboState.NONE;
+                activateTimerToReset = false;
+                current_Combo_Timer = default_Combo_Timer;
+            }
+        }
+     } 
+    //reset combo
 }
